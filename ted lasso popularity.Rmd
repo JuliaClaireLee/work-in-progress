@@ -1,0 +1,61 @@
+---
+title: "Untitled"
+author: "Julia Lee"
+date: "8/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(devtools)
+library(readr)
+library(tidyverse)
+#install.packages("mdsr")
+library(mdsr)
+require(devtools)
+library(ggthemes)
+library(ggplot2)
+library(ggthemes)
+library(RColorBrewer)
+library(gridExtra)
+library(rmarkdown)
+
+#install.packages("tm")
+#install.packages("textdata")
+library(textdata)
+#install.packages("rtweet")
+library(rtweet) 
+#install.packages("tidytext")
+library(tidytext)
+#install.packages("ggpubr")
+library(ggpubr) 
+library(tidyverse)
+#install.packages("wordcloud")
+library(wordcloud)
+library(RColorBrewer)
+#install.packages("RCurl")
+library(RCurl)
+require(ggplot2)
+
+#install.packages("ggforce")
+require(ggforce)
+
+require(devtools)
+library(tm)
+```
+
+
+
+```{r}
+ted<- search_tweets2("ted lasso", n =100000, include_rts = F, retryonratelimit = TRUE,  lang = "en")
+```
+
+```{r}
+ts_plot(ted, "3 days")
+```
+
+```{r}
+
+
+```
