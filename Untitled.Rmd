@@ -1,0 +1,81 @@
+---
+title: "Untitled"
+author: "Julia Lee"
+date: "8/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(leaflet)
+#install.packages("tidygeocoder")
+library(tidygeocoder)
+library(dplyr)
+#install.packages("zipcodeR")
+library(zipcodeR)
+#install.packages("maps")
+library(tidyverse)
+library(maps)
+#install.packages("devtools")
+library(devtools)
+#install.packages("viridis")
+library(viridis)
+#devtools::install_github("hrbrmstr/albersusa")
+library(ggthemes)
+#install.packages("viridisLite")
+library(viridisLite)
+library(albersusa)
+library(ggmap)
+#install.packages("ggrepel")
+#install.packages("dplyr")
+library(data.table)
+```
+
+```{r}
+zipcode_totals <- read_csv("cdph-vaccination-zipcode-totals.csv")
+
+police_killings <- read_csv("los-angeles-police-killings.csv")
+
+
+decisions <- read_csv("los-angeles-prosecutor-decisions.csv")
+
+police_killings<- merge(police_killings, decisions, by = "coroners_case_number" )
+View(los_angeles_prosecutor_decisions)
+us<-map_data('county')
+
+us <- us %>%
+  filter(region == "california") %>%
+  filter(subregion == "los angeles")
+myMap <- get_stamenmap(bbox = c(left = -119.4969,
+                                    bottom = 33.63576,
+                                    right = -117.5,
+                                    top = 34.9),
+          maptype = "terrain", 
+          crop = FALSE,
+          zoom = 6)
+
+
+
+```
+
+
+```{r}
+
+
+
+color3<-colorFactor("Dark2", police_killings$race)
+white_house <- tibble(
+  address = "Los Angeles"
+) %>%
+  tidygeocoder::geocode(address, method = "osm")
+police_killings$long<-police_killings$x
+police_killings$lat<-police_killings$y
+white_house_map <- leaflet() %>% 
+  addTiles() %>%
+  addCircles(data = police_killings, popup = ~paste0("<b>","Date of killing: ",death_date.x, "</b></br>", "Race of person killed: ", race,"</b></br>","Cause of death: ", cause, "</b></br>","Prosecutor's decision: ", decision ), color = ~color3(race)) %>%
+ addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE,
+  updateWhenIdle = TRUE)) 
+white_house_map
+```
+
